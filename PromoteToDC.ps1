@@ -16,29 +16,4 @@ Install-ADDSForest `
 -Force:$true
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .
