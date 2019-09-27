@@ -23,4 +23,4 @@ export Subnet=$(az network vnet subnet show --resource-group NEU-IDs --vnet-name
 az network vnet subnet update -g NEU-IDs --vnet-name NEU-IDs-VNet --name $Subnet --network-security-group DC-NSG
 
 
-az vm create --resource-group NEU-IDs --name NEU-DC01 --location NorthEurope --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --boot-diagnostics-storage $D --license-type Windows_Server --nsg ""
+az vm create --resource-group NEU-IDs --name NEU-DC01 --location EastUs --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --boot-diagnostics-storage $D --license-type Windows_Server --nsg ""  --no-wait
