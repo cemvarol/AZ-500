@@ -18,9 +18,9 @@ az network nsg rule create -g NEU-IDs --nsg-name DC-NSG -n DC-Rule --priority 10
 export SUBNETID=$(az network vnet subnet show --resource-group NEU-IDs --vnet-name NEU-IDs-VNet --name SN01 --query id -o tsv)
 
 
-export Subnet=$(az network vnet subnet show --resource-group DC-IDs --vnet-name NEU-IDs-VNet --name SN01 --query name -o tsv)
+export Subnet=$(az network vnet subnet show --resource-group NEU-IDs --vnet-name NEU-IDs-VNet --name SN01 --query name -o tsv)
 
-az network vnet subnet update -g DC-IDs --vnet-name NEU-IDs-VNet --name $Subnet --network-security-group MigrateNSG
+az network vnet subnet update -g NEU-IDs --vnet-name NEU-IDs-VNet --name $Subnet --network-security-group DC-NSG
 
 
-az vm create --resource-group DC-IDs --name NEU-DC01 --location EastUs --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --license-type Windows_Server --nsg "" --boot-diagnostics-storage $D ---no-wait --yes
+az vm create --resource-group NEU-IDs --name NEU-DC01 --location EastUs --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --license-type Windows_Server --nsg "" --boot-diagnostics-storage $D --no-wait --yes
