@@ -24,3 +24,5 @@ az network vnet subnet update -g NEU-IDs --vnet-name NEU-IDs-VNet --name $Subnet
 
 
 az vm create --resource-group NEU-IDs --name NEU-DC01 --location NorthEurope --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --boot-diagnostics-storage $D --license-type Windows_Server --nsg ""
+
+
