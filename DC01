@@ -1,0 +1,26 @@
+az group create --name NEU-IDs --location 'NorthEurope'
+
+
+A=$(az ad signed-in-user show --query userPrincipalName)
+B=${A:$(echo `expr index "$A" @`)}
+C=${B:: -27}
+D=$(echo "$C"dcstr01)
+
+az storage account create --name $D --resource-group NEU-IDs --kind Storage --location NorthEurope --sku Standard_LRS
+
+az network vnet create --resource-group NEU-IDs --name NEU-IDs-VNet  --address-prefixes 11.1.0.0/16 --subnet-name SN01 --subnet-prefix 11.1.1.0/24
+
+
+az network nsg create -g NEU-IDs -n DC-NSG
+az network nsg rule create -g NEU-IDs --nsg-name DC-NSG -n DC-Rule --priority 100 --destination-port-ranges "*"
+
+
+export SUBNETID=$(az network vnet subnet show --resource-group NEU-IDs --vnet-name NEU-IDs-VNet --name SN01 --query id -o tsv)
+
+
+export Subnet=$(az network vnet subnet show --resource-group NEU-IDs --vnet-name NEU-IDs-VNet --name SN01 --query name -o tsv)
+
+az network vnet subnet update -g NEU-IDs --vnet-name NEU-IDs-VNet --name $Subnet --network-security-group DC-NSG
+
+
+az vm create --resource-group NEU-IDs --name NEU-DC01 --location EastUs --image Win2019DataCenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "NEU-DC01-Pip01" --subnet $SUBNETID --boot-diagnostics-storage $D --license-type Windows_Server --nsg ""  --no-wait
