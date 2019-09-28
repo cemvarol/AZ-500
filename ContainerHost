@@ -9,7 +9,7 @@ D=$(echo "$C"str01)
 az storage account create --name $D --resource-group ContainerZ --kind Storage --location EastUs2 --sku Standard_LRS
 
 az network nsg create -g ContainerZ -n ConsNSG
-az network nsg rule create -g ContainerZ --nsg-name ConsNSG -n MigRule --priority 100 --destination-port-ranges "*"
+az network nsg rule create -g ContainerZ --nsg-name ConsNSG -n ConRule --priority 100 --destination-port-ranges "*"
 
 
 az network vnet create --resource-group ContainerZ --name Cons-VNet01  --address-prefixes 10.0.0.0/16 --subnet-name ConsSN01 --subnet-prefix 10.0.0.0/24
