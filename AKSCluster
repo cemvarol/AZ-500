@@ -1,0 +1,4 @@
+az group create --name AZ500 --location westus
+
+az aks create --resource-group AZ500 -name alamo -node-count 3 --generate-ssh-keys --no-wait
+
