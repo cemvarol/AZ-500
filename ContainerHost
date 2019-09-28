@@ -1,0 +1,24 @@
+az group create --name ContainerZ --location 'EastUs2'
+
+A=$(az ad signed-in-user show --query userPrincipalName)
+B=${A:$(echo `expr index "$A" @`)}
+C=${B:: -27}
+D=$(echo "$C"str01)
+
+
+az storage account create --name $D --resource-group ContainerZ --kind Storage --location EastUs2 --sku Standard_LRS
+
+az network nsg create -g ContainerZ -n ConsNSG
+az network nsg rule create -g ContainerZ --nsg-name ConsNSG -n MigRule --priority 100 --destination-port-ranges "*"
+
+
+az network vnet create --resource-group ContainerZ --name Cons-VNet01  --address-prefixes 10.0.0.0/16 --subnet-name ConsSN01 --subnet-prefix 10.0.0.0/24
+
+export SUBNETID=$(az network vnet subnet show --resource-group ContainerZ --vnet-name Cons-VNet01 --name ConsSN01 --query id -o tsv)
+
+export Subnet=$(az network vnet subnet show --resource-group ContainerZ --vnet-name Cons-VNet01 --name ConsSN01 --query name -o tsv)
+
+az network vnet subnet update -g ContainerZ --vnet-name Cons-VNet01 --name $Subnet --network-security-group ConsNSG
+
+az vm create --resource-group ContainerZ --name Cons-HostVM01 --location EastUs2 --image MicrosoftWindowsServer:WindowsServer:2019-Datacenter-with-Containers:17763.557.1907191810  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_D4s_v3 --public-ip-address "Cons-HostVM01-Pip01" --subnet $SUBNETID --license-type Windows_Server --nsg "" --boot-diagnostics-storage $D
+
