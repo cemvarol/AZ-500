@@ -16,7 +16,7 @@
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2015-05-01-preview",
             "name": "[parameters('SQL Server Name')]",
-            "location": "eastus",
+            "location": "WestEurope",
             "kind": "v12.0",
             "properties": {
                 "administratorLogin": "[variables('QAistratorLogin')]",
@@ -40,7 +40,7 @@
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2017-03-01-preview",
             "name": "[concat(parameters('SQL Server Name'), '/WEU-DB01')]",
-            "location": "eastus",
+            "location": "WestEurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('SQL Server Name'))]"
             ],
