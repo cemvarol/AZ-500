@@ -1,0 +1,20 @@
+
+A=$(az ad signed-in-user show --query userPrincipalName)
+B=${A:$(echo `expr index "$A" @`)}
+C=${B:: -27}
+D=$(echo "$C"str03)
+
+
+az storage account create --name $D --resource-group WEU-Assets --kind Storage --location WestEurope --sku Standard_LRS
+
+az network nsg create -g WEU-Assets -n WEU-NSG
+az network nsg rule create -g WEU-Assets --nsg-name WEU-NSG -n WEU-Rule --priority 100 --destination-port-ranges "*"
+
+
+export SUBNETID=$(az network vnet subnet show --resource-group WEU-Assets --vnet-name WEU-VNet01 --name SN01 --query id -o tsv)
+
+export Subnet=$(az network vnet subnet show --resource-group WEU-Assets --vnet-name WEU-VNet01 --name SN01 --query name -o tsv)
+
+az network vnet subnet update -g WEU-Assets --vnet-name WEU-VNet01 --name $Subnet --network-security-group WEU-NSG
+
+az vm create --resource-group WEU-Assets --name WEU-VM03 --location WestEurope --image Win2019Datacenter  --admin-username QA --admin-password 1q2w3e4r5t6y* --size standard_Ds1_v2 --public-ip-address "WEU-VM03-Pip01" --subnet $SUBNETID --license-type Windows_Server --nsg "" --boot-diagnostics-storage $D
